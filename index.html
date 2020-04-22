@@ -10,52 +10,55 @@
 <body>
     <header class="container my-4" id="header">
         <a href="">View HighScores</a>
-        <span id="timer" class="float-right mr-2"></span>
+        <span id="timer" class="float-right mr-2">Time: 0</span>
     </header>
-    <section class="container" id="home">
+    <!-- home section -->
+    <section class="container mt-5" id="home">
         <div class="row justify-content-center mt-5 pt-3 pb-3">
             <div class="col-10 col-lg-8 text-center">
                 <h1>Coding Quiz Challenge</h1> <br>
                 <p>Try to answer the following questions about coding with JavaScript in 75 seconds. <br>
                 <strong>NOTE:</strong> If you answer incorrectly, you'll lose some time (15 seconds to be exact)!</p> <br>
-                <button type="button" id="startBtn" class="btn btn-info btn-lg">START</button>
+                <button type="button" id="startBtn" class="btn btn-lg" style="background-color: darkslateblue; color: white;">START</button>
             </div>
         </div>
     </section>
-    
+    <!-- quiz section -->
     <section class="container mt-5 d-none" id="quiz">
             <div class="row justify-content-center mt-5 pt-3 pb-3">
                 <div class="col-10 col-lg-8 questions">
                     <h3 id="questiontitle" ></h3>
                 </div>
             </div>
-            <div class="row">
+            <div class="row justify-content-center ">
                 <div class="col-10 col-lg-8" id="choices"></div>
             </div>
-            <div class="row">
+            <hr>
+            <div class="row ml-5">
                 <div id="feedback" class="feedback hide"></div>
             </div>
     </section>
-
+    <!-- highscore section -->
     <section class="container mt-5 d-none" id="highscore" >
-        <div class="row">
+        <div class="row justify-content-center mt-5 pt-3 pb-3">
             <div id="high-score" class="col-md-12">
-                    <h2>All Done!</h2>
-                    <h3 >Your final score is:<span id="final-score"></span></h3>
-                    <label for="initials-area">Enter initials:</label>
-                    <input type="text" name="initials-area" maxlength="10" id="initials">
-                    <button id="submit" type="submit">Submit</button>
+                <h2>All Done!</h2>
+                <h3 >Your final score is:<span id="final-score"></span></h3>
+                <label for="initials-area">Enter initials:</label>
+                <input type="text" name="initials-area" maxlength="15" id="initials">
+                <button type="button" id="submit" class="btn btn-md" style="background-color: darkslateblue; color: white;">Submit</button>
             </div>
         </div>
     </section>
-
+    <!-- end section -->
     <section class="container mt-5 d-none" id="quizend">
-        <div class="row">
+        <div class="row justify-content-center mt-5 pt-5">
             <div class="col-md-12">
                 <h2>Highscores</h2>
                 <ol id="highscores"></ol>
-                <button id="goback">Go Back</button>
-                <button id="clear">Clear Highscores</button>
+                <button type="button" id="goback" class="btn btn-md" style="background-color: darkslateblue; color: white;">Go Back</button>
+                <button type="button" id="clear" class="btn btn-md" style="background-color: darkslateblue; color: white;">Clear Highscores</button>
+                
             </div>
         </div>
     </section>

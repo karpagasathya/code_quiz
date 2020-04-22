@@ -1,4 +1,6 @@
 button{
     display:block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: white;
+    background-color:darkslateblue;
 }

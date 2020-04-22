@@ -42,6 +42,8 @@ var finalScore = document.querySelector("#final-score");
 var initialsEl = document.querySelector("#initials");
 var submitBtn = document.querySelector("#submit");
 var gobackBtn = document.querySelector("#goback");
+var clearBtn = document.querySelector("#clear");
+var olEl = document.querySelector("#highscores");
 
 var secondsLeft = 75;
 var currentQuestionIndex = 0;
@@ -62,10 +64,11 @@ function setTimer() {
 }
 
 function startQuiz() {
-    
+    setTimer();
     document.getElementById("home").classList.add("d-none");
     document.getElementById("quiz").classList.remove("d-none");
-    setTimer();
+    document.getElementById("timer").classList.remove("d-none");
+    
     getQuestion();
 }
 
@@ -77,47 +80,43 @@ function getQuestion() {
 
     currentQuestion.choices.forEach(function (choice, i) {
         
-        var answerEl = document.createElement("button");
-        answerEl.setAttribute("class", "choice");
-        answerEl.setAttribute("value", choice);
+      var answerEl = document.createElement("button");
+      answerEl.setAttribute("class", "choice");
+      answerEl.setAttribute("value", choice);
+      answerEl.setAttribute("style", "background:darkslateblue; color:white");
   
-        answerEl.textContent = choice;
-        choicesEl.appendChild(answerEl);
-        answerEl.addEventListener("click", questionClick);
-
-        
-        
+      answerEl.textContent = choice;
+      choicesEl.appendChild(answerEl);
+      answerEl.addEventListener("click", questionClick);
+ 
     });
+    clearFeedback();
 }
 
 function questionClick() {
     
-    if (this.value !== quizQuestions[currentQuestionIndex].answer) {
+  if (this.value !== quizQuestions[currentQuestionIndex].answer) {
       
-        secondsLeft -= 15;
+    secondsLeft -= 15;
   
-        if (secondsLeft < 0) {
-            secondsLeft = 0;
-        }
-        timer.textContent = secondsLeft;
-        feedbackEl.textContent = "Wrong!";
-        
-    
+      if (secondsLeft < 0) {
+      secondsLeft = 0;
+      }
+      timer.textContent = secondsLeft;
+      feedbackEl.textContent = "Wrong!";
     } else {
-        feedbackEl.textContent = "Correct!";
+      feedbackEl.textContent = "Correct!";
         
     }
 
     feedbackEl.setAttribute("class", "feedback");
     
-
     currentQuestionIndex++;
 
     if (currentQuestionIndex === quizQuestions.length) {
       quizEnd();
     } else {
-
-         getQuestion();
+      getQuestion();
     }
 }
 
@@ -146,17 +145,49 @@ function saveHighscore(event) {
 
     // localStorage.setItem("newScore", newScore);
     localStorage.setItem("newScore", JSON.stringify(newScore));
-
-    // var highScore = JSON.parse(localStorage.getItem("highScore"));
+    var newScore = JSON.parse(localStorage.getItem("newScore"));
+  
+  var liEl = document.createElement("li");
+  liEl.textContent = initialsEl.value +"-"+ secondsLeft;
+  olEl.appendChild(liEl);
     // highScore.push(newScore);
 
 }
 
-// function playAgain() {
-//     document.getElementById("quizend").classList.add("d-none");
-//     document.getElementById("home").classList.remove("d-none");
-// }
+function playAgain() {
+    document.getElementById("quizend").classList.add("d-none");
+    document.getElementById("home").classList.remove("d-none");
+    document.getElementById("header").classList.remove("d-none");
+    // document.getElementById("timer").classList.add("d-none");
+     secondsLeft = 75;
+     currentQuestionIndex = 0;
+    timerId = 0;
+  timer.textContent = "Time: 0";
+  initialsEl.value = " ";
+ 
 
+}
 
+function clearFeedback() {
+
+    var feedbackTime = 2;
+    var feedbackTimer = setInterval(function () {
+      feedbackTime--;
+
+        if (feedbackTime === 0) {
+          feedbackEl.textContent = "";
+        clearInterval(feedbackTimer);
+      }
+    }, 1000);
+
+    
+}
+
+function clearHighscore() {
+  localStorage.removeItem("newScore");
+  
+}
 startBtn.addEventListener("click", startQuiz);
 submitBtn.addEventListener("click", saveHighscore);
+gobackBtn.addEventListener("click", playAgain);
+clearBtn.addEventListener("click", clearHighscore);
