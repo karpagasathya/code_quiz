@@ -1,6 +1,10 @@
 button{
     display:block;
     margin-bottom: 8px;
-    color: white;
-    background-color:darkslateblue;
+}
+ ol{
+
+    text-align: left;
+    list-style-position: inside;
+
 }

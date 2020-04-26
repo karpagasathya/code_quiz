@@ -1,26 +1,30 @@
 var quizQuestions = [
   {
-    question: "Inside which HTML element do we put the JavaScript?",
+    question: "1. Inside which HTML element do we put the JavaScript?",
     choices: ["<javascript>", "<js>", "<scripting>", "<script>"],
     answer: "<script>",
   },
   {
-    question: "How do you call a function named 'myFunction'?",
+    question: "2. How do you call a function named 'myFunction'?",
     choices: ["myFunction()", "call myFunction()", "call function myFunction()", "function myFunction()"],
     answer: "myFunction()",
   },
   {
-    question: "What javascipt method can we use to select an html element?",
+    question: "3. What javascipt method can we use to select an html element?",
     choices: ["document.queryselector()", "document.getElementChild", "document.getElementById", "Both 1 and 3"],
     answer: "Both 1 and 3",
   },
   {
-    question: "Which event occurs when the user clicks on an HTML element?",
+    question: "4. Which event occurs when the user clicks on an HTML element?",
     choices: ["onmouseover", "onclick", "onchange", "onmouseclick"],
     answer: "onclick",
   },
+  {
+    question: "5. Commonly used data types DO NOT include:",
+    choices: ["strings", "booleans", "alerts", "numbers"],
+    answer: "alerts",
+  },
 ];
-
 
 var startBtn = document.querySelector("#startBtn");
 var timer = document.querySelector("#timer");
@@ -34,7 +38,6 @@ var submitBtn = document.querySelector("#submit");
 var gobackBtn = document.querySelector("#goback");
 var clearBtn = document.querySelector("#clear");
 var olEl = document.querySelector("#highscores");
-var viewHighscoreEl = document.querySelector("#viewHighscore");
 
 var secondsLeft = 75;
 var currentQuestionIndex = 0;
@@ -55,6 +58,8 @@ function setTimer() {
 
 function startQuiz() {
   setTimer();
+  // swap from home screen to quiz screen
+  // HTML DOM classlist property refered from w3schools to add and remove the classnames
   document.getElementById("home").classList.add("d-none");
   document.getElementById("quiz").classList.remove("d-none");
   document.getElementById("timer").classList.remove("d-none");
@@ -67,15 +72,13 @@ function getQuestion() {
   var questionEl = document.getElementById("questiontitle");
   questionEl.textContent = currentQuestion.question;
   choicesEl.innerHTML = " ";
-
-  console.log("inside get question. current index: ", currentQuestionIndex);
-
+// used foreach loop instead of for loop to get the choices
   currentQuestion.choices.forEach(function (choice, i) {
     var answerEl = document.createElement("button");
     answerEl.setAttribute("class", "choice");
     answerEl.setAttribute("value", choice);
     answerEl.setAttribute("style", "background:darkslateblue; color:white");
-    answerEl.setAttribute("class", "btn btn-secondary d-block btn-md");
+    answerEl.setAttribute("class", "btn btn-secondary d-block btn-sm text-monospace");
     answerEl.textContent = i + 1 + ". " + choice;
     choicesEl.appendChild(answerEl);
     answerEl.addEventListener("click", answerClick);
@@ -83,14 +86,14 @@ function getQuestion() {
 }
 
 function answerClick() {
-  console.log("inside answer click. current index: ", currentQuestionIndex);
   if (this.value !== quizQuestions[currentQuestionIndex].answer) {
     secondsLeft -= 15;
 
     if (secondsLeft < 0) {
       secondsLeft = 0;
     }
-    timer.textContent = secondsLeft;
+    // feedback display at the bottom of answers
+    timer.textContent = "Time: " + secondsLeft;
     feedbackEl.textContent = "Wrong!";
   } else {
     feedbackEl.textContent = "Correct!";
@@ -110,12 +113,10 @@ function answerClick() {
 }
 
 function quizEnd() {
+  clearInterval(timerId);
   setTimeout(function () {
     document.getElementById("quiz").classList.add("d-none");
-    clearInterval(timerId);
-
     document.getElementById("highscore").classList.remove("d-none");
-
     finalScore.textContent = secondsLeft;
   }, 500);
 }
@@ -141,16 +142,22 @@ function saveHighscore(event) {
 
     // sorting the array for highscores
     localStorage.setItem("highScore", JSON.stringify(existingHighScoreArr.sort((a, b) => (b.score > a.score ? 1 : -1))));
-    olEl.innerHTML = "";
-    existingHighScoreArr.forEach((existingHighScore) => {
-      liEl = document.createElement("li");
-      liEl.textContent = existingHighScore.initials + "-" + existingHighScore.score;
-      olEl.appendChild(liEl);
-    });
+
+    getHighscoreFromLocalStorage();
   }
+}
+// viewing highscore 
+function getHighscoreFromLocalStorage() {
+  olEl.innerHTML = "";
+  JSON.parse(localStorage.getItem("highScore") || "[]").forEach((existingHighScore) => {
+    liEl = document.createElement("li");
+    liEl.textContent = existingHighScore.initials + "-" + existingHighScore.score;
+    olEl.appendChild(liEl);
+  });
 }
 
 function playAgain() {
+  // https://developer.mozilla.org/en-US/docs/Web/API/Location/reload
   location.reload();
 }
 
@@ -158,11 +165,18 @@ function clearHighscore() {
   localStorage.removeItem("highScore");
   olEl.innerHTML = "";
 }
-
+// when view Highscores link on top header clicked this function runs and displays the Highscores
+function viewHighscore() {
+  clearInterval(timerId);
+  document.getElementById("home").classList.add("d-none");
+  document.getElementById("quiz").classList.add("d-none");
+  document.getElementById("header").classList.add("d-none");
+  document.getElementById("highscore").classList.add("d-none");
+  document.getElementById("quizend").classList.remove("d-none");
+  getHighscoreFromLocalStorage();
+}
 
 startBtn.addEventListener("click", startQuiz);
 submitBtn.addEventListener("click", saveHighscore);
 gobackBtn.addEventListener("click", playAgain);
 clearBtn.addEventListener("click", clearHighscore);
-
-
