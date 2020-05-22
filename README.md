@@ -19,7 +19,7 @@ This Application create a quiz with multiple choice questions using HTML,CSS and
   - Clear button resets the page and local storage.
   - Go back button travels to the start of the quiz.
 
-You can run this Application and take a Code quiz [here] (https://karpagasathya.github.io/hw4_code_quiz/)
+You can run this Application and take a Code quiz [here](https://karpagasathya.github.io/code_quiz/)
 
 ## Screenshots
 ![](images/start.jpg)
